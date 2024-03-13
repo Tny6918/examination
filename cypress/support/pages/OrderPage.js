@@ -1,10 +1,14 @@
 import BasePage from "./BasePage";
+import {closePopupWindow} from "../helper";
 
 
 class OrderPage extends BasePage{
 
     constructor() {
         super();
+        this.productCard = 'mat-card.mat-card';
+        this.closePopupButton = 'button.close-dialog';
+
         this.shoppingCart = '[aria-label="Show the shopping cart"]';
         this.checkoutButton = '#checkoutButton';
 
@@ -19,6 +23,20 @@ class OrderPage extends BasePage{
 
         this.buttonPlaceOrder = '#checkoutButton';
 
+    }
+
+    getProductCard() {
+        return cy.get(this.productCard, {timeout: 6000});
+    }
+
+    visit() {
+        cy.log('Open home page with product catalog')
+        cy.visit('/');
+        this.getProductCard().should('be.visible');
+    }
+
+    getPopupWindow() {
+        return cy.get(this.closePopupButton, {timeout: 10000});
     }
 
     getShoppingCart() {
@@ -58,6 +76,9 @@ class OrderPage extends BasePage{
     }
 
 
+    closePopupWelcomeWindow() {
+        this.getPopupWindow().click();
+    }
 
     openShoppingCart() {
         this.getShoppingCart().click();

@@ -12,13 +12,13 @@ describe('Test submit feedback', () => {
 
         cy.log('Change the rating slider and check it')
         feedbackPage.changeRatingSlider();
-        feedbackPage.getRatingSlider().should('have.attr', 'aria-valuenow', 3);
+        feedbackPage.getRatingSlider().should('have.attr', 'aria-valuenow', 4);
 
         cy.log('Solve captcha');
         feedbackPage.solveCaptcha();
 
         cy.log('Submit the provided feedback');
         feedbackPage.submitFeedback();
-        feedbackPage.checkSuccessesToast();
+        feedbackPage.getSubmitFeedbackButton().should('have.class', 'mat-button-disabled');
     })
 })

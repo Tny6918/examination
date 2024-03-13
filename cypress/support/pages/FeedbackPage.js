@@ -65,15 +65,18 @@ class FeedbackPage extends BasePage{
     }
 
     changeRatingSlider() {
-        this.getRatingSlider().invoke('val', 3).trigger('change');
+        const step = 1;
+        const arrow = '{rightarrow}'.repeat(step);
+        this.getRatingSlider().type(arrow);
     }
 
     solveCaptcha() {
         this.getCaptcha().invoke('text').then(expression => {
             let captcha = eval(expression);
-            captcha = solvedCaptcha;
+            this.getResultCaptcha().type(captcha);
+
         })
-        this.getResultCaptcha().type(solvedCaptcha);
+
     }
 
     submitFeedback() {
