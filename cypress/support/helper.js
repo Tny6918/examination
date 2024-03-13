@@ -40,7 +40,6 @@ export function headlessRegistration(userEmail, userPassword, userSecurityAnswer
         }
     }).then(response => {
         expect(response.status).to.eq(201);
-        //expect(response.body.data.email).to.have.property(`${userEmail}`);
     })
 }
 
@@ -55,10 +54,11 @@ export function findProduct() {
 }
 
 export function findProduct2(productName) {
-    cy.get('body').then((body) => {
+    cy.get('mat-card').then((body) => {
         if (body.find(`div.item-name:contains("${productName}")`).length > 0) {
             cy.get(`div.item-name:contains("${productName}")`)
-                .find('[aria-label="Add to Basket"]')
+                .parents('.mat-card')
+                .find('button[aria-label="Add to Basket"]')
                 .click();
         } else {
             cy.log('No item with given product name found');
@@ -74,6 +74,22 @@ export function findProduct3(productName) {
             cy.log('No item with given product name found');
         }
     })
+}
+
+export function itemSearchMainPage(productName) {
+    cy.log('Find item');
+    return cy.get('mat-card').then((cards) => {
+        if (cards.find(`div.item-name:contains("${productName}")`).length > 0) {
+            return cy.get(`div.item-name:contains("${productName}")`).then(() => {
+                cy.get(`img[alt="${productName}"]`).then(($img) => {
+                    cy.wrap($img).parents('.mat-card').find('button[aria-label="Add to Basket"]').click();
+                });
+            });
+        } else {
+            cy.get('button.mat-paginator-navigation-next').click({ force: true });
+            return itemSearchMainPage(productName);
+        }
+    });
 }
 
 export function closePopupWindow() {

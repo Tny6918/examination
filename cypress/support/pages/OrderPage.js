@@ -10,6 +10,7 @@ class OrderPage extends BasePage{
         this.closePopupButton = 'button.close-dialog';
 
         this.shoppingCart = '[aria-label="Show the shopping cart"]';
+        this.boughtProduct = 'mat-cell.cdk-column-product';
         this.checkoutButton = '#checkoutButton';
 
         this.radioButtonAddress = '#mat-radio-40';
@@ -41,6 +42,10 @@ class OrderPage extends BasePage{
 
     getShoppingCart() {
         return cy.get(this.shoppingCart);
+    }
+
+    getBoughtProduct() {
+        return cy.get(this.boughtProduct, {timeout: 15000});
     }
 
     getCheckoutButton() {
@@ -82,6 +87,7 @@ class OrderPage extends BasePage{
 
     openShoppingCart() {
         this.getShoppingCart().click();
+        this.getBoughtProduct().should('be.visible');
     }
 
     checkoutFromShoppingCart() {
