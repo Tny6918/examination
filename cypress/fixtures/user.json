@@ -1,0 +1,15 @@
+{
+  "email": "emailtest111@yahoo.com",
+  "password": "Test_Password1111",
+  "answer": "Savenko",
+  "country": "Ukraine",
+  "name": "Anton",
+  "mobile": "0963330220",
+  "zip": "49000",
+  "address": "Shevchenko 17",
+  "city": "Dnipro",
+  "state": "Dniprovska",
+  "comment": "A test comment",
+  "securityAnswer": "Shevchenko",
+  "timeCreation": "2024-03-13T09:06:46.356Z"
+}
