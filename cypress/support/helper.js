@@ -16,9 +16,12 @@ export function headlessLogin(userEmail, userPassword) {
         expect(response.body.authentication).to.have.property('umail');
         expect(response.body.authentication.umail).to.equal(userEmail);
 
+        //let continueCode
         let tokenAuth = response.body.authentication.token;
+        let bidAuth = response.body.authentication.bid;
         cy.setCookie('token', tokenAuth);
         window.localStorage.setItem('token', tokenAuth);
+        window.sessionStorage.setItem('bid', bidAuth);
     })
 }
 
@@ -43,16 +46,6 @@ export function headlessRegistration(userEmail, userPassword, userSecurityAnswer
     })
 }
 
-export function findProduct() {
-    cy.get('body').then((body) => {
-        if (body.find(`button[aria-label="Add to Basket"]`).length > 0) {
-            cy.get(`button[aria-label="Add to Basket"]`).first().click();
-        } else {
-            cy.log('No button add to basket found');
-        }
-    })
-}
-
 export function findProduct2(productName) {
     cy.get('mat-card').then((body) => {
         if (body.find(`div.item-name:contains("${productName}")`).length > 0) {
@@ -66,39 +59,11 @@ export function findProduct2(productName) {
     })
 }
 
-export function findProduct3(productName) {
-    cy.get('body').then((body) => {
-        if (body.find(`div.item-name:contains("${productName}")`).length > 0) {
-            cy.get('[aria-label="Add to Basket"]').click();
-        } else {
-            cy.log('No item with given product name found');
-        }
-    })
-}
-
-export function itemSearchMainPage(productName) {
-    cy.log('Find item');
-    return cy.get('mat-card').then((cards) => {
-        if (cards.find(`div.item-name:contains("${productName}")`).length > 0) {
-            return cy.get(`div.item-name:contains("${productName}")`).then(() => {
-                cy.get(`img[alt="${productName}"]`).then(($img) => {
-                    cy.wrap($img).parents('.mat-card').find('button[aria-label="Add to Basket"]').click();
-                });
-            });
-        } else {
-            cy.get('button.mat-paginator-navigation-next').click({ force: true });
-            return itemSearchMainPage(productName);
-        }
-    });
-}
-
 export function closePopupWindow() {
     cy.get('body').then((body) => {
         if(body.find(`#mat-dialog-0`).length > 0) {
             cy.log('Closing the found welcome pop-up');
             cy.get(`body`).click(0,0);
-            //cy.get(`.close-dialog`, {timeout: 6000}).should('not.be.visible');
-
         } else {
             cy.log('no popup window was found to close');
         }

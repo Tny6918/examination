@@ -3,7 +3,6 @@ import {faker} from "@faker-js/faker";
 import user from "../../fixtures/user.json";
 
 user.comment = faker.word.adjective();
-let solvedCaptcha;
 let successToastText = 'Thank you for your feedback.';
 
 class FeedbackPage extends BasePage{

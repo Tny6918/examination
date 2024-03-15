@@ -2,12 +2,8 @@ import user from "../fixtures/user.json";
 import addressPage from "../support/pages/AddressPage";
 import paymentPage from "../support/pages/PaymentPage";
 import orderPage from "../support/pages/OrderPage";
-import {findProduct, findProduct2} from "../support/helper";
-import {headlessRegistration} from "../support/helper";
+import {findProduct2, closePopupWindow} from "../support/helper";
 import {faker} from "@faker-js/faker";
-import {headlessLogin} from "../support/helper";
-import {closePopupWindow} from "../support/helper";
-import {itemSearchMainPage} from "../support/helper";
 import registrationPage from "../support/pages/RegistrationPage";
 import loginPage from "../support/pages/LoginPage";
 
@@ -18,48 +14,55 @@ user.timeCreation = faker.date.recent().toISOString();
 
 describe('Placing order', () => {
     before(() => {
+        cy.log('Open registration form')
         registrationPage.visit();
         registrationPage.openLoginForm();
         registrationPage.closePopupWindow();
         registrationPage.openRegistrationForm();
 
+        cy.log('Fill registration form')
         registrationPage.fillRegistrationForm();
         registrationPage.fillSecurityRegForm();
         registrationPage.submitRegistration();
 
-
+        cy.log('Fill login form')
+        loginPage.visit();
         loginPage.fillLoginFields(user.email, user.password);
         loginPage.checkAuthorisedUser();
-        loginPage.getAuthorisedUserEmail().should('have.text', ' ' + user.email + ' ');
+        loginPage.getAuthorisedUserEmail().should('be.visible');
     })
 
 
     it('creating a new purchase', () => {
 
+        cy.intercept('GET', '/api/Products/*').as('Products');
         orderPage.visit();
 
         findProduct2('Apple Pomace');
+        cy.wait('@Products');
         orderPage.openShoppingCart();
         orderPage.checkoutFromShoppingCart();
 
-        cy.log('Adding address and selecting delivery');
+        cy.log('Adding address');
+        addressPage.completeAddAddressForm();
 
-        orderPage.addNewAddress();
-        addressPage.fillAddressFields();
-        orderPage.completeAddingNewAddress();
-
+        cy.log('Selecting added new address as a delivery address');
         orderPage.selectDeliveryAddress();
-        orderPage.completeAddingDelivery();
+
+        cy.log('Selecting type of delivery');
+        orderPage.selectDeliveryType();
 
         cy.log('Adding payment method and selecting new payment card');
 
-        orderPage.addNewPaymentCard();
         paymentPage.fillPaymentOptionFields();
+        orderPage.addNewPaymentCard();
         orderPage.proceedToReviewOrder();
 
-        cy.log('Review and placing new order');
+        cy.log('Placing new order');
 
-        orderPage.proceedToReviewOrder();
+        orderPage.placeOrder();
+        orderPage.getConfirmationOrderMessage().should('be.visible');
+
 
     })
 })

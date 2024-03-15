@@ -4,8 +4,8 @@ import {faker} from "@faker-js/faker";
 
 user.country = faker.location.country();
 user.name = faker.person.firstName();
-user.mobile = faker.phone.number();
-user.zip = faker.location.zipCode();
+user.mobile = faker.string.numeric(10);
+user.zip = faker.string.numeric(5);
 user.address = faker.location.streetAddress();
 user.city = faker.location.city();
 user.state = faker.location.state();
@@ -16,6 +16,7 @@ class AddressPage extends BasePage{
         super();
 
         this.addNewAddressButton = '[aria-label="Add a new address"]';
+        this.addNewAddressChildButton = 'span.mat-button-wrapper';
         this.addCountryField = '#mat-input-1';
         this.addNameField = '#mat-input-2';
         this.addMobileNumberField = '#mat-input-3';
@@ -26,10 +27,11 @@ class AddressPage extends BasePage{
         this.submitAddressButton = '#submitButton';
 
         this.addedAddressCountry = 'mat-cell.cdk-column-Country';
+
     }
 
     getNewAddressButton() {
-        return cy.get(this.addNewAddressButton);
+        return cy.get(this.addNewAddressChildButton).parents(this.addNewAddressButton);
     }
 
     getCountryField() {
@@ -64,14 +66,12 @@ class AddressPage extends BasePage{
         return cy.get(this.submitAddressButton);
     }
 
-    //using for the test that the address is added and countries are matching
     getAddedAddressCountry() {
         return cy.get(this.addedAddressCountry);
     }
 
 
-
-    fillAddressFields() {
+    completeAddAddressForm() {
         this.getNewAddressButton().click();
         this.getCountryField().type(user.country);
         this.getNameField().type(user.name);
@@ -81,6 +81,7 @@ class AddressPage extends BasePage{
         this.getCityField().type(user.city);
         this.getStateField().type(user.state);
         this.getSubmitAddressButton().click();
+        this.getAddedAddressCountry().should('have.text', `${user.country}`);
     }
 
 }

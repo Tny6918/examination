@@ -6,7 +6,7 @@ export default class BasePage {
     }
 
     getAccountButton() {
-        return cy.get(this.accountButton)
+        return cy.get(this.accountButton);
     }
 
 }

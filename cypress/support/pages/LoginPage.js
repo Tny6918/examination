@@ -10,7 +10,7 @@ class LoginPage extends BasePage{
         this.passwordLoginField = '#password';
         this.authLoginButton = '#loginButton';
 
-        this.authorisedUserEmail = `button[aria-label="Go to user profile"] span`;
+        this.authorisedUserEmail = `button[aria-label="Go to user profile"]`;
     }
 
     visit() {

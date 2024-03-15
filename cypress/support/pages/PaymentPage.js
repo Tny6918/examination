@@ -10,12 +10,12 @@ class PaymentPage extends BasePage{
         super();
         this.expansionCardPanel = '#mat-expansion-panel-header-0';
 
-        this.addCardNameField = '#mat-input-1';
-        this.addCardNumField = '#mat-input-2';
-        this.addExpiryMonthDropDown = '#mat-input-3';
-        this.optionExpiryMonth = 'option[value="1"]';
-        this.addExpiryYearDropDown = '#mat-input-4';
-        this.optionExpiryYear = 'option[value="2080"]';
+        this.addCardNameFieldParent = 'div.mat-form-field-infix';
+        this.addCardNameFieldChild = 'mat-label.ng-star-inserted';
+        this.addCardNumFieldParent = 'div.mat-form-field-flex';
+        this.addCardNumFieldChild = 'mat-label.ng-star-inserted';
+        this.ExpiryMonth = 'select.mat-input-element';
+
         this.continueButtonPayment = '#submitButton';
 
         this.addedPaymentCardName = 'mat-cell.mat-column-Name';
@@ -27,27 +27,27 @@ class PaymentPage extends BasePage{
     }
 
     getCardNameField() {
-        return cy.get(this.addCardNameField);
+        return cy.get(this.addCardNameFieldChild).contains('Name').parents(this.addCardNameFieldParent);
     }
 
     getCardNumField() {
-        return cy.get(this.addCardNumField);
+        return cy.get(this.addCardNumFieldChild).contains('Card Number').parents(this.addCardNumFieldParent);
     }
 
-    getExpiryMonthDropDown() {
-        return cy.get(this.addExpiryMonthDropDown);
+    getExpiryMonth()  {
+        return cy.get(this.ExpiryMonth).first();
     }
 
-    getOptionExpiryMonth() {
-        return cy.get(this.optionExpiryMonth);
+    setExpiryMonth() {
+        this.getExpiryMonth().select('1').should('have.value', '1');
     }
 
-    getExpiryYearDropDown() {
-        return cy.get(this.addExpiryYearDropDown);
+    getExpiryYear() {
+        return cy.get(this.ExpiryMonth).last();
     }
 
-    getOptionExpiryYear() {
-        return cy.get(this.optionExpiryYear);
+    setExpiryYear() {
+        this.getExpiryYear().select('2080').should('have.value', '2080');
     }
 
     getContinueButtonPayment() {
@@ -65,11 +65,10 @@ class PaymentPage extends BasePage{
         this.getExpansionCardPanel().click();
         this.getCardNameField().type(user.cardname);
         this.getCardNumField().type(user.cardnum);
-        this.getExpiryMonthDropDown().click();
-        this.getOptionExpiryMonth().click();
-        this.getExpiryYearDropDown().click();
-        this.getOptionExpiryYear().click();
+        this.setExpiryMonth();
+        this.setExpiryYear();
         this.getContinueButtonPayment().click();
+        this.getAddedPaymentCardName().should('have.text', `${user.cardname}`);
     }
 }
 

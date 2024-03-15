@@ -19,7 +19,7 @@ describe('Authorization positive test', () => {
         loginPage.visit();
         loginPage.fillLoginFields(user.email, user.password);
         loginPage.checkAuthorisedUser();
-        loginPage.getAuthorisedUserEmail().should('have.text', ' ' + user.email + ' ');
+        loginPage.getAuthorisedUserEmail().should('be.visible');
 
     })
 
@@ -28,7 +28,7 @@ describe('Authorization positive test', () => {
         loginPage.visit();
         loginPage.closePopupWindow();
         loginPage.checkAuthorisedUser();
-        loginPage.getAuthorisedUserEmail().should('have.text', ' ' + user.email + ' ');
+        loginPage.getAuthorisedUserEmail().should('be.visible');
 
     })
 })

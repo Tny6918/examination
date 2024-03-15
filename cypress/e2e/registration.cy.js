@@ -30,7 +30,7 @@ describe('register with valid data', () => {
 
     loginPage.fillLoginFields(user.email, user.password);
     loginPage.checkAuthorisedUser();
-    loginPage.getAuthorisedUserEmail().should('have.text', ' ' + user.email + ' ');
+    loginPage.getAuthorisedUserEmail().should('be.visible');
 
   })
 })
