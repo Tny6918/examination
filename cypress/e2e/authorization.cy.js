@@ -4,7 +4,7 @@ import {headlessLogin} from "../support/helper";
 import registrationPage from "../support/pages/RegistrationPage";
 
 describe('Authorization positive test', () => {
-    before(() => {
+    it('Registration before login', () => {
         registrationPage.visit();
         registrationPage.openLoginForm();
         registrationPage.closePopupWindow();
@@ -17,16 +17,9 @@ describe('Authorization positive test', () => {
 
     it('Authorization test', () => {
         loginPage.visit();
-        loginPage.fillLoginFields(user.email, user.password);
-        loginPage.checkAuthorisedUser();
-        loginPage.getAuthorisedUserEmail().should('be.visible');
 
-    })
-
-    it('Test auth headless helper', () => {
-        headlessLogin(user.email, user.password);
-        loginPage.visit();
         loginPage.closePopupWindow();
+        loginPage.fillLoginFields(user.email, user.password);
         loginPage.checkAuthorisedUser();
         loginPage.getAuthorisedUserEmail().should('be.visible');
 

@@ -26,7 +26,6 @@ describe('Placing order', () => {
         registrationPage.submitRegistration();
 
         cy.log('Fill login form')
-        loginPage.visit();
         loginPage.fillLoginFields(user.email, user.password);
         loginPage.checkAuthorisedUser();
         loginPage.getAuthorisedUserEmail().should('be.visible');
